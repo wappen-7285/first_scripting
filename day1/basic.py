@@ -1,23 +1,23 @@
 import requests
 from bs4 import BeautifulSoup
 
-url = "https://tsunishi.jp/"
-res = requests.get(url)
-soup = BeautifulSoup(res.content, "html.parser")
+def fetch_ariticles(url):
+    res = requests.get(url)
+    soup = BeautifulSoup(res.content, "html.parser")
 
-articles = []
+    articles = []
+    for a in soup.find_all("a"):
+      title = a.text.strip()
+      link = a.get("href")
 
-for a in soup.find_all("a"):
-    title = a.text.strip()
-    link = a.get("href")
-
-    if title and link:
-        articles.append({
+      if title and link:
+          articles.append({
             "title": title,
             "link" : link
         })
+    return articles
 
-for article in articles:
-    print(article["title"])
-    print(article["link"])
-    print("-" * 20)
+url = "https://www.mie-takada-hj.ed.jp/hj4/"
+articles = fetch_ariticles(url)
+for a in articles:
+    print(a)
